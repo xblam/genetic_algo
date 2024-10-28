@@ -1,6 +1,6 @@
 # make up an imaginary knapsack
 
-BACKPACK_SIZE = 250
+
 
 
 # Here's an outline for using a genetic algorithm (GA) to solve the Knapsack problem:
@@ -21,3 +21,27 @@ BACKPACK_SIZE = 250
 
 # generations: number of iterations that we will run for
 
+
+# have to make a box object to keep track fo all th eboxes - the easiest way to do this would be just to make a set
+
+MAX_WEIGHT = 250
+GENERATIONS = 100
+POPULATION = 100
+
+# the boxes will just be defined by their val and weight
+boxes = [
+    {"value": 20, "weight": 6},   # Box 1
+    {"value": 30, "weight": 5},   # Box 2
+    {"value": 60, "weight": 8},   # Box 3
+    {"value": 90, "weight": 7},   # Box 4
+    {"value": 50, "weight": 6},   # Box 5
+    {"value": 70, "weight": 9},   # Box 6
+    {"value": 30, "weight": 4},   # Box 7
+    {"value": 30, "weight": 5},   # Box 8
+    {"value": 70, "weight": 4},   # Box 9
+    {"value": 20, "weight": 9},   # Box 10
+    {"value": 20, "weight": 2},   # Box 11
+    {"value": 60, "weight": 1}    # Box 12
+]
+
+# now find the combination of boxes that leads to the max wieght
