@@ -1,5 +1,5 @@
 # make up an imaginary knapsack
-
+import random
 
 
 
@@ -13,35 +13,69 @@
 # Crossover rate: Probability of combining two individuals.
 # Generations: Number of iterations.
 
-# need to make the number of potential solutions per generation
 
-# need to make the mutation rate: probability of mutating an individual
-
-# corssover rate: change of combining two individuals
-
-# generations: number of iterations that we will run for
-
-
-# have to make a box object to keep track fo all th eboxes - the easiest way to do this would be just to make a set
-
+# constants
 MAX_WEIGHT = 250
 GENERATIONS = 100
 POPULATION = 100
-
-# the boxes will just be defined by their val and weight
-boxes = [
-    {"value": 20, "weight": 6},   # Box 1
-    {"value": 30, "weight": 5},   # Box 2
-    {"value": 60, "weight": 8},   # Box 3
-    {"value": 90, "weight": 7},   # Box 4
-    {"value": 50, "weight": 6},   # Box 5
-    {"value": 70, "weight": 9},   # Box 6
-    {"value": 30, "weight": 4},   # Box 7
-    {"value": 30, "weight": 5},   # Box 8
-    {"value": 70, "weight": 4},   # Box 9
-    {"value": 20, "weight": 9},   # Box 10
-    {"value": 20, "weight": 2},   # Box 11
-    {"value": 60, "weight": 1}    # Box 12
+BOXES = [
+    {"value": 6, "weight": 20},
+    {"value": 5, "weight": 30},
+    {"value": 8, "weight": 60},
+    {"value": 7, "weight": 90},
+    {"value": 6, "weight": 50},
+    {"value": 9, "weight": 70},
+    {"value": 4, "weight": 30},
+    {"value": 5, "weight": 30},
+    {"value": 4, "weight": 70},
+    {"value": 9, "weight": 20}, 
+    {"value": 2, "weight": 20}, 
+    {"value": 1, "weight": 60}  
 ]
+NUM_BOXES = len(BOXES)
+
+# get the weight to make sure that knapsack can actually hold
+def weight(individual):
+    total_weight = sum(BOXES[i]["weight"] for i in individual if individual[i] == 1)
+    return total_weight
+
+# if we are under the weight limit then the fitness will just be the value of boxes. If overweight we get 0 (do not like)
+def fitness(individual):
+    if weight(individual) > 250:
+        return 0
+    total_value = sum(BOXES[i]["value"] for i in individual if individual[i] == 1)
+    return total_value
+
+
+def initialize_population():
+    population = []
+    pop_count = 0
+
+    for _ in range(POPULATION):
+        individual = [random.randint(0, 1) for _ in range(NUM_BOXES)] # randomly choose boxes
+        population.append(individual) 
+
+    return population
 
 # now find the combination of boxes that leads to the max wieght
+def genetic_algorithm():
+
+    # initialize the population
+    population = initialize_population()
+
+    # make fitness function
+    
+    # once we get the fitness score then we can choose the best ones to reproduce?
+    
+    # make a fitness functino so taht we can judge how good their performance is
+
+    # find a way to choose the parents for the crossover
+
+    # make new offspring with the parents
+
+    # apply mutation to the offspring
+
+    # cull the population by 50%
+
+if __name__ == "__main__":
+    genetic_algorithm()
