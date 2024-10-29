@@ -8,3 +8,6 @@ My guidelines for project goes as follows:
 - Provide the **genome** structure for the problem.
 - Define all the **fringe operations** (e.g., mutation, crossover).
 - **Cull** the population by **50% at every generation**.
+
+
+When ran, this program will give the best score that it can find for each generation that the simulation runs for. User can adjust the number of generations, population, mutation rate, boxes, etc at the top of the program

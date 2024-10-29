@@ -17,7 +17,8 @@ import random
 # constants
 MAX_WEIGHT = 250
 GENERATIONS = 100
-POPULATION = 100
+POPULATION = 1000
+MUTATE_RATE = 0.01
 BOXES = [
     {"value": 6, "weight": 20},
     {"value": 5, "weight": 30},
@@ -34,48 +35,86 @@ BOXES = [
 ]
 NUM_BOXES = len(BOXES)
 
-# get the weight to make sure that knapsack can actually hold
+# get the weight to make sure that knapsack can actually hold, do this by adding weight of box if have box
 def weight(individual):
-    total_weight = sum(BOXES[i]["weight"] for i in individual if individual[i] == 1)
+    total_weight = sum(BOXES[i]["weight"] for i in range(NUM_BOXES) if individual[i] == 1)
     return total_weight
 
-# if we are under the weight limit then the fitness will just be the value of boxes. If overweight we get 0 (do not like)
+# same thing as weight but with val call this fitness, make sure if we are over weight limit we get 0
 def fitness(individual):
     if weight(individual) > 250:
         return 0
-    total_value = sum(BOXES[i]["value"] for i in individual if individual[i] == 1)
+    total_value = sum(BOXES[i]["value"] for i in range(NUM_BOXES) if individual[i] == 1)
     return total_value
 
-
+# make the initial population
 def initialize_population():
     population = []
-    pop_count = 0
-
     for _ in range(POPULATION):
         individual = [random.randint(0, 1) for _ in range(NUM_BOXES)] # randomly choose boxes
         population.append(individual) 
-
+    for i in population:
+        print(fitness(i))
     return population
 
-# now find the combination of boxes that leads to the max wieght
+# select out of a group of 10 to reproduce, standard tournament selection worsk without replacement
+def tournament_selection(population):
+    selected = []
+    for _ in range(POPULATION // 2 ): # this will also be where we do the culling
+        competitors = random.sample(population, 10)  # choose the best of random sample of 10
+        best = max(competitors, key=fitness)
+        selected.append(best)
+    return selected
+
+# crossover will stay simple,  it will just be a combination of the 2 parents
+def crossover(parent1, parent2):
+    point = random.randint(1, NUM_BOXES - 1)
+    child1 = parent1[:point] + parent2[point:]
+    child2 = parent2[:point] + parent1[point:]
+    return child1, child2
+
+def mutate(individual):
+    for i in range(NUM_BOXES):
+        if random.random() < MUTATE_RATE: # this one is chosen to mutate
+            individual[i] = 1 - individual[i] # flip the box if mutate
+    return individual
+
+
+
+# now find the combination of boxes that leads to the max weight
 def genetic_algorithm():
 
     # initialize the population
     population = initialize_population()
 
-    # make fitness function
-    
-    # once we get the fitness score then we can choose the best ones to reproduce?
-    
-    # make a fitness functino so taht we can judge how good their performance is
+    for curr_gen in range(GENERATIONS):
 
-    # find a way to choose the parents for the crossover
+        # we are going to sample select the best ones and have them reproduce
+        selected = tournament_selection(population)
 
-    # make new offspring with the parents
+        #reproducing from selection
+        offspring = []
+        for i in range(0, len(selected), 2):
+            if i + 1 < len(selected): # error from going out of bounds so put this here
+                child1, child2 = crossover(selected[i], selected[i + 1])
+                offspring.append(child1)
+                offspring.append(child2)
 
-    # apply mutation to the offspring
+        # mutate all the kids
+        for i in range(len(offspring)):
+            offspring[i] = mutate(offspring[i])
+        # print(len(offspring))
+        
+        # now combine children with selected
+        population = selected + offspring
+        # print(len(population))
 
-    # cull the population by 50%
+        best_solution = max(population, key=fitness)
+
+        print(f"Generation: {curr_gen}, best solution: {best_solution}, weight: {weight(best_solution)}, score: {fitness(best_solution)}")
+    return best_solution
+
+
 
 if __name__ == "__main__":
     genetic_algorithm()
